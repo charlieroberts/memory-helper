@@ -1,8 +1,8 @@
 {
   "name": "memory-helper",
   "version": "1.0.0",
-  "description": "a small utility to assist in memory allocation.",
-  "main": "index.js",
+  "description": "a small utility to assist in memory allocation with Typed Arrays.",
+  "main": "index.transpiled.js",
   "dependencies": {},
   "devDependencies": {
     "mocha": "^2.5.3",
@@ -17,5 +17,9 @@
     "memory"
   ],
   "author": "Charlie Roberts <charlie@charlie-roberts.com> (http://www.charlie-roberts.com/)",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charlieroberts/memory-helper"
+  }
 }

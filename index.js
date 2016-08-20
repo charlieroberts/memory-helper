@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 let MemoryHelper = {
   create( size=4096, memtype=Float32Array ) {
