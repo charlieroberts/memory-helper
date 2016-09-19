@@ -41,10 +41,12 @@ var MemoryHelper = {
             }
           }
         }
-
+        
         break;
       }
     }
+    
+    if( idx !== -1 ) delete this.freeList[ idx ]
 
     if (idx === -1) {
       var keys = Object.keys(this.list),

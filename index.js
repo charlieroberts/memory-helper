@@ -40,6 +40,8 @@ let MemoryHelper = {
           }
         }
 
+        delete this.freeList[ key ]
+
         break
       }
     }
