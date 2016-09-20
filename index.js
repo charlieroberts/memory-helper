@@ -13,23 +13,23 @@ let MemoryHelper = {
     return helper
   },
 
-  alloc( amount ) {
+  alloc( size, immutable ) {
     let idx = -1
 
-    if( amount > this.heap.length ) {
+    if( size > this.heap.length ) {
       throw Error( 'Allocation request is larger than heap size of ' + this.heap.length )
     }
 
     for( let key in this.freeList ) {
-      let candidateSize = this.freeList[ key ]
+      let candidate = this.freeList[ key ]
 
-      if( candidateSize >= amount ) {
+      if( candidate.size >= size ) {
         idx = key
 
-        this.list[ idx ] = amount
+        this.list[ idx ] = { size, immutable, references:1 }
 
-        if( candidateSize !== amount ) {
-          let newIndex = idx + amount,
+        if( candidate.size !== size ) {
+          let newIndex = idx + size,
               newFreeSize
 
           for( let key in this.list ) {
@@ -40,11 +40,11 @@ let MemoryHelper = {
           }
         }
 
-        delete this.freeList[ key ]
-
         break
       }
     }
+
+    if( idx !== -1 ) delete this.freeList[ idx ]
 
     if( idx === -1 ) {
       let keys = Object.keys( this.list ),
@@ -53,36 +53,41 @@ let MemoryHelper = {
       if( keys.length ) { // if not first allocation...
         lastIndex = parseInt( keys[ keys.length - 1 ] )
 
-        idx = lastIndex + this.list[ lastIndex ]
+        idx = lastIndex + this.list[ lastIndex ].size
       }else{
         idx = 0
       }
 
-      this.list[ idx ] = amount
+      this.list[ idx ] = { size, immutable, references:1 }
     }
 
-    if( idx + amount >= this.heap.length ) {
+    if( idx + size >= this.heap.length ) {
       throw Error( 'No available blocks remain sufficient for allocation request.' )
     }
     return idx
   },
 
   free( index ) {
-    if( typeof this.list[ index ] !== 'number' ) {
+    if( this.list[ index ] === undefined ) {
       throw Error( 'Calling free() on non-existing block.' )
     }
 
-    this.list[ index ] = 0
+    let slot = this.list[ index ]
+    slot.references--
 
-    let size = 0
-    for( let key in this.list ) {
-      if( key > index ) {
-        size = key - index
-        break
+    if( slot.references === 0 && slot.immutable !== true ) {    
+      this.list[ index ] = 0
+
+      let freeBlockSize = 0
+      for( let key in this.list ) {
+        if( key > index ) {
+          freeBlockSize = key - index
+          break
+        }
       }
-    }
 
-    this.freeList[ index ] = size
+      this.freeList[ index ] = freeBlockSize
+    }
   },
 }
 

@@ -36,7 +36,10 @@ describe( 'MemoryHelper', ()=> {
 
   it( 'should maintain a free list', ()=> {
     let helper = MemoryHelper.create(), // defaults to 1024 blocks
-        answer = { 0:32, 32:32 },
+        answer = { 
+          0: { size:32, immutable:undefined, references:1 },
+          32:{ size:32, immutable:undefined, references:1 }
+        },
         result
 
     helper.alloc( 32 )
@@ -48,7 +51,11 @@ describe( 'MemoryHelper', ()=> {
 
   it( 'should remove blocks from free list on calls to free()', ()=> {
     let helper = MemoryHelper.create(),
-        answer = { 0:32, 32:0, 64:32 }, // second block is freed
+        answer = { 
+          0:{ size:32, immutable:undefined, references:1 },
+          32:0, // freed
+          64:{ size:32, immutable:undefined, references:1 }
+        }, 
         blockToBeFreedIndex, result
 
     helper.alloc( 32 )
