@@ -1,11 +1,13 @@
 'use strict'
 
 let MemoryHelper = {
-  create( size=4096, memtype=Float32Array ) {
+  create( sizeOrBuffer=4096, memtype=Float32Array ) {
     let helper = Object.create( this )
 
+    // conveniently, buffer constructors accept either a size or an array buffer to use...
+    // so, no matter which is passed to sizeOrBuffer it should work.
     Object.assign( helper, {
-      heap: new memtype( size ),
+      heap: new memtype( sizeOrBuffer ),
       list: {},
       freeList: {}
     })
@@ -67,12 +69,19 @@ let MemoryHelper = {
     return idx
   },
 
+  addReference( index ) {
+    if( this.list[ index ] !== undefined ) { 
+      this.list[ index ].references++
+    }
+  },
+
   free( index ) {
     if( this.list[ index ] === undefined ) {
       throw Error( 'Calling free() on non-existing block.' )
     }
 
     let slot = this.list[ index ]
+    if( slot === 0 ) return
     slot.references--
 
     if( slot.references === 0 && slot.immutable !== true ) {    

@@ -69,12 +69,18 @@ var MemoryHelper = {
     }
     return idx;
   },
+  addReference: function addReference(index) {
+    if (this.list[index] !== undefined) {
+      this.list[index].references++;
+    }
+  },
   free: function free(index) {
     if (this.list[index] === undefined) {
       throw Error('Calling free() on non-existing block.');
     }
 
     var slot = this.list[index];
+    if (slot === 0) return;
     slot.references--;
 
     if (slot.references === 0 && slot.immutable !== true) {

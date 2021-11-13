@@ -2,8 +2,10 @@
   "name": "memory-helper",
   "version": "1.1.1",
   "description": "a small utility to assist in memory allocation with Typed Arrays.",
-  "main": "index.transpiled.js",
-  "dependencies": {},
+  "main": "index.js",
+  "dependencies": {
+    "babel-cli": "^6.26.0"
+  },
   "devDependencies": {
     "mocha": "^2.5.3",
     "babel": "6.3.13",
