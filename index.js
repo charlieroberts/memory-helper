@@ -98,7 +98,7 @@ let MemoryHelper = {
 
   addReference( index ) {
     if( this.list[ index ] !== undefined ) { 
-      this.list[ index ].references++https://x.com/homegit
+      this.list[ index ].references++
     }
   },
 
