@@ -1,6 +1,6 @@
 {
   "name": "memory-helper",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "a small utility to assist in memory allocation with Typed Arrays.",
   "main": "index.js",
   "dependencies": {
